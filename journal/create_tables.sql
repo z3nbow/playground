@@ -4,12 +4,12 @@
 CREATE TABLE events(
     id          INTEGER PRIMARY KEY,
     date        TEXT,
-    type        INTEGER DEFAULT 0,
+    title       TEXT,
     time        TEXT DEFAULT NULL,
+    text        TEXT DEFAULT NULL,
     end_date    TEXT DEFAULT NULL,
     end_time    TEXT DEFAULT NULL,
-    title       TEXT,
-    text        TEXT DEFAULT NULL
+    type        INTEGER DEFAULT 0
 );
 
 CREATE TABLE tasks(

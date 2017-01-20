@@ -1,54 +1,48 @@
 #!/usr/bin/env ruby
 
 require "pp"
+require "date"
 require "sequel"
 
 class Event
 
-    attr_accessor :text
+    attr_accessor :id, :date, :title, :time, :text, :end_date, :end_time, :type
 
     def initialize(values)
-
-        raise "ERROR: missing date"  unless values.has_key?(:date)
-        @date = values[:date]
-
-        raise "ERROR: missing title" unless values.has_key?(:title)
-        @title = values[:title]
-
-        @id       = nil
-        @time     = nil
-        @end_time = nil
-        @text     = nil
-
-        @id   = values[:id]   if values.has_key?(:id)
-        @type = values[:type] if values.has_key?(:type)
-        @time = values[:time] if values.has_key?(:time)
-
-        #if values.has_key?(:end_date)
-        #    @end_date = values[:end_date]
-        #else
-        #    @end_date = @date
-        #end
-
-        @end_date = values[:end_date] if values.has_key?(:end_date)
-
-        @end_time = values[:end_time] if values.has_key?(:end_time)
-
-        @text = values[:text] if values.has_key?(:text)
-
+        @id       = values[:id]       
+        @date     = values[:date]     
+        @title    = values[:title]    
+        @time     = values[:time]     
+        @text     = values[:text]
+        @end_date = values[:end_date] 
+        @end_time = values[:end_time]
+        @type     = values[:type] 
+        @type = 0 unless @type
     end
 
     def to_h
         hash = {}
         hash[:id]       = @id       if @id
         hash[:date]     = @date     if @date
-        hash[:type]     = @type     if @type
+        hash[:title]    = @title    if @title
         hash[:time]     = @time     if @time
+        hash[:text]     = @text     if @text
         hash[:end_date] = @end_date if @end_date
         hash[:end_time] = @end_time if @end_time
-        hash[:title]    = @title    if @title
-        hash[:text]     = @text     if @text
+        hash[:type]     = @type 
         hash
+    end
+
+    def year
+        @date[0..3]
+    end
+
+    def month
+        @date[4..5].sub(/^0/, "")
+    end
+
+    def day
+        @date[6..7].sub(/^0/, "")
     end
 
 end
@@ -70,22 +64,37 @@ class Journal
         end
     end
 
-    def get_month(month, year)
-        # select * from events where "yearmonth01" <= date <= "yearmonth31" union
-        # select * from events where date <= "yearmonth31" && end_date >= "yearmonth01"
-        # order by date, time asc
-        d1 = year.to_s + month.to_s + "01"
-        d2 = year.to_s + month.to_s + "31"
-        #pp @events.where( :date => d1..d2 ).union(@events.where{ (date <= d2) & (end_date >= d1) }).order(:date).sql
-        #@events.where( :date => d1..d2 ).union(@events.where{ (date <= d2) & (end_date >= d1) }).order(:date).each do |i|
-        #pp @event.where(Sequel.or( (date >= d1) & (date <= d2), ((date <= d2) & (end_date >= d1)) }.order(:date)
-        @events.where( :date => (d1..d2) ).or{ (date <= d2) & (end_date >= d1) }.order(:date).each do |i|
-            print i[:date] + "  " + i[:title]
-            print "  (" + i[:end_date] + ")" if i[:end_date]
-            print "\n"
+    def self.date(year, month, day)
+        y = year.to_s
+        m = month.to_s
+        d = day.to_s
+        y = "20" + y if y.length == 2
+        y = "200" + y if y.length == 1
+        m = "0" + m if m.length == 1
+        d = "0" + d if d.length == 1
+        y + m + d
+    end
+
+    def get_month(year, month)
+
+        day_1  = Journal.date(year, month, 1)
+        day_31 = Journal.date(year, month, 31)
+
+        result = {}
+
+        (1..Date.new(year, month, -1).day).each do |day| result[day.to_s] = [] end
+
+        pp result
+        
+        @events.where(:date => (day_1..day_31)).or{(date <= day_31) & (end_date >= day_1)}.order(:date).each do |entry|
+            event = Event.new(entry)
+            if not event.end_date
+                pp event.day
+                result[event.day] << event.id
+            end
         end
 
-
+        result
     end
 
 end
@@ -132,7 +141,7 @@ j = Journal.new("test.db")
 
 #create_test_events(j)
 
-j.get_month("01", 2017)
+pp j.get_month(17,1)
 
 
 
