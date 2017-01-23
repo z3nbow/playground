@@ -26,10 +26,10 @@ month = 3
     box = BoxElement.new( :x => x, :y => y, :w => 100, :h => 1, :p => background )
     text_element = TextElement.new("")
     box.add_child(text_element)
-    text = sprintf("%2d", day)
+    text = "<0.2>:" * (2-day.to_s.length) + "<1>" + day.to_s
     screen.add_element(box)
     events[year][month][day].each do |event|
-        text += "  <1,0,0><b>#{event.title}<t>"
+        text += "<0.2>::<1>|<0.2>::<1,0,0><b>#{event.title}<t>"
     end
     text_element.text = text
     y += 1
