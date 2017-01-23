@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require "./color.rb"
-
 class Pixel
 
     attr_accessor :symbol

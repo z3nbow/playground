@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-require "./color.rb"
-require "./pixel.rb"
-
 class Element
     attr_accessor :children
     attr_accessor :layer
