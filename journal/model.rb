@@ -6,7 +6,7 @@ require "sequel"
 
 class Event
 
-    attr_accessor :id, :type, :date, :time, :title, :text, :end_date, :end_time
+    attr_accessor :id, :type, :date, :time, :title, :text, :end_date, :end_time, :data
 
     def initialize(values)
         @id = values[:id]
@@ -31,6 +31,10 @@ class Event
         end
 
         @end_time = values[:end_time]
+
+        # hash for storing additional data (different frontends)
+        @data = {}
+
     end
 
     def to_h

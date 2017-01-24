@@ -35,7 +35,7 @@ class Screen
 
         last_pixel = Pixel.new
 
-        (1..(resolution_y-1)).each do |y|
+        (1..resolution_y).each do |y|
             (1..resolution_x).each do |x|
                 pixel = @data[[x,y]]
                 unless pixel.same_style?(last_pixel)
