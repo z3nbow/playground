@@ -4,69 +4,69 @@ require "pp"
 
 class Color
 
-    attr_accessor :red
-    attr_accessor :green
-    attr_accessor :blue
+    attr_accessor :r
+    attr_accessor :g
+    attr_accessor :b
 
-    def initialize(red = 1.0, green = nil, blue = nil)
-        set!(red, green, blue)
+    def initialize(r = 1.0, g = nil, b = nil)
+        set!(r, g, b)
     end
 
-    def set!(red = 1.0, green = nil, blue = nil)
-        if green == nil && blue == nil
-            @red = red
-            @green = red
-            @blue = red
+    def set!(r = 1.0, g = nil, b = nil)
+        if g == nil && b == nil
+            @r = r
+            @g = r
+            @b = r
         else
-            @red = red
-            @green = green
-            @blue = blue
+            @r = r
+            @g = g
+            @b = b
         end
         self
     end
 
-    def set_int!(red = 5, green = nil, blue = nil)
-        if green == nil && blue == nil
-            self.set!(red/5.0)
+    def set_int!(r = 5, g = nil, b = nil)
+        if g == nil && b == nil
+            self.set!(r/5.0)
         else
-            self.set!(red/5.0, green/5.0, blue/5.0)
+            self.set!(r/5.0, g/5.0, b/5.0)
         end
     end
 
     def to_s
-        if @red == @green && @green == @blue
-            ((@red * 23.0).round + 232).to_s
+        if @r == @g && @g == @b
+            ((@r * 23.0).round + 232).to_s
         else
             (16 +
-             (@blue * 5.0).round +
-             ((@green * 5.0).round * 6) +
-             ((@red * 5.0).round * 36)).to_s
+             (@b * 5.0).round +
+             ((@g * 5.0).round * 6) +
+             ((@r * 5.0).round * 36)).to_s
         end
     end
 
     def drop_shadow!
-        if @red == @green && @green == @blue
-            @red   *= 0.7
-            @green *= 0.7
-            @blue  *= 0.7
+        if @r == @g && @g == @b
+            @r   *= 0.7
+            @g *= 0.7
+            @b  *= 0.7
         else
-            @red   -= 0.4
-            @green -= 0.4
-            @blue  -= 0.4
-            @red    = 0 if @red < 0
-            @green  = 0 if @green < 0
-            @blue   = 0 if @blue < 0
+            @r   -= 0.4
+            @g -= 0.4
+            @b  -= 0.4
+            @r    = 0 if @r < 0
+            @g  = 0 if @g < 0
+            @b   = 0 if @b < 0
         end
         self
     end
 
     def ==(color)
         return false unless color
-        @red == color.red && @green == color.green && @blue == color.blue
+        @r == color.r && @g == color.g && @b == color.b
     end
 
     def invert
-        Color.new( 1.0 - @red, 1.0 - @green, 1.0 - @blue )
+        Color.new( 1.0 - @r, 1.0 - @g, 1.0 - @b )
     end
 
 end
