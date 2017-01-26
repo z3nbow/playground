@@ -11,13 +11,13 @@ class Screen
     attr_accessor :elements
     attr_accessor :default_pixel
     attr_accessor :data
-    attr_accessor :resolution_x
-    attr_accessor :resolution_y
+    attr_accessor :size_x
+    attr_accessor :size_y
 
     def initialize(pixel = Pixel.new)
         @elements = []
         @default_pixel = pixel
-        @resolution_y, @resolution_x = IO.console.winsize
+        @size_y, @size_x = IO.console.winsize
     end
 
     def add_element(element)
@@ -25,23 +25,24 @@ class Screen
     end
 
     def draw
-        @data = Hash.new(@default_pixel)
+        data = Hash.new(@default_pixel)
 
         # terminal resolution
-        @resolution_y, @resolution_x = IO.console.winsize
+        @size_y, @size_x = IO.console.winsize
 
         # load elements
         @elements.sort{ |a,b| a.layer <=> b.layer }.each do |element|
-            element.draw_on(@data)
+            element.draw_on({ :data => data, :size_x => @size_x, :size_y => @size_y })
         end
 
+        # clear screen, go to top/left, reset all styles
         out = "\e[2J\e[H\e[0m"
 
         last_pixel = Pixel.new
 
-        (1..(resolution_y)).each do |y|
-            (1..resolution_x).each do |x|
-                pixel = @data[[x,y]]
+        (1..(size_y)).each do |y|
+            (1..size_x).each do |x|
+                pixel = data[[x,y]]
                 unless pixel.same_style?(last_pixel)
                     out += "\e[0m"
                     out += "\e[1m"                        if pixel.bold
