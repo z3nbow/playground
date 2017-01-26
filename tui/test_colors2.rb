@@ -24,15 +24,13 @@ screen = Screen.new(Pixel.new( :s => ":", :c => Color.new(0.2), :b => Color.new(
             end
             x = r * (size_x + padding_x) + padding_x + s_x + 1
             y = g * (size_y + padding_y) + padding_y + s_y + 1
-            box = BoxElement.new( :s => true, :x => x, :y => y, :w => size_x, :h => size_y, :p => Pixel.new( :b => Color.new.set_int!(b, g, r) ))
+            box = BoxElement.new( :s => true, :x => x, :y => y, :w => size_x, :h => size_y, :p => Pixel.new( :b => Color.new.set_int!(r, g, b), :s => " " ))
             if r + g + b <= 4
                 col = Color.new(1)
             else
                 col = Color.new(0)
             end
-            box.data[[1,1]] = Pixel.new( :s => b.to_s, :c => col )
-            box.data[[2,1]] = Pixel.new( :s => g.to_s, :c => col )
-            box.data[[3,1]] = Pixel.new( :s => r.to_s, :c => col )
+            box.add_child(TextElement.new("<#{col.r},#{col.g},#{col.b}></b>#{r}#{g}#{b}"))
             screen.add_element(box)
         end
     end

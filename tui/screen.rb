@@ -49,6 +49,7 @@ class Screen
                     out += "\e[38;5;#{pixel.color}m"      if pixel.color
                     out += "\e[48;5;#{pixel.background}m" if pixel.background
                 end
+                pixel.symbol = " " unless pixel.symbol
                 out += pixel.symbol
                 last_pixel = pixel
             end
@@ -61,7 +62,3 @@ class Screen
     end
 
 end
-
-
-
-

@@ -89,16 +89,17 @@ class BoxElement < Element
                 # inner position
                 i_x = x - x1 + 1
                 i_y = y - y1 + 1
-                # remember background
-                background = canvas[[x,y]].background
-                # pixel given?
-                if @data[[i_x,i_y]] != @default_pixel
-                    canvas[[x,y]] = @data[[i_x,i_y]]
-                    canvas[[x,y]].background = @default_pixel.background if canvas[[x,y]].transparent
-                else
-                    canvas[[x,y]] = @default_pixel.clone
-                    canvas[[x,y]].background = background if canvas[[x,y]].transparent
-                end
+                canvas[[x,y]] = canvas[[x,y]].merge(@data[[i_x,i_y]])
+#                # remember background
+#                background = canvas[[x,y]].background
+#                # pixel given?
+#                if @data[[i_x,i_y]] != @default_pixel
+#                    canvas[[x,y]] = @data[[i_x,i_y]]
+#                    canvas[[x,y]].background = @default_pixel.background if canvas[[x,y]].transparent
+#                else
+#                    canvas[[x,y]] = @default_pixel.clone
+#                    canvas[[x,y]].background = background if canvas[[x,y]].transparent
+#                end
             end
         end
 
@@ -162,37 +163,35 @@ class TextElement < Element
                         pixel.bold        = false if tag == "/b"
                         pixel.underline   = true  if tag == "u"
                         pixel.underline   = false if tag == "/u"
-                        pixel.transparent = true  if tag == "t"
-                        pixel.transparent = false if tag == "/t"
+                        pixel.background  = nil   if tag == "t"
 
                         if tag.match(/^([01](\.\d+){0,1})$/)
                             grey = Regexp.last_match.captures[0].to_f
                             pixel.color = Color.new(grey)
                         end
                         if tag.match(/^([01](\.\d+){0,1}),([01](\.\d+){0,1}),([01](\.\d+){0,1})$/)
-                            red   = Regexp.last_match.captures[0].to_f
-                            green = Regexp.last_match.captures[2].to_f
-                            blue  = Regexp.last_match.captures[4].to_f
-                            pixel.color = Color.new(red, green, blue)
+                            r = Regexp.last_match.captures[0].to_f
+                            g = Regexp.last_match.captures[2].to_f
+                            b = Regexp.last_match.captures[4].to_f
+                            pixel.color = Color.new(r, g, b)
                         end
                         if tag.match(/^_([01](\.\d+){0,1})$/)
                             grey = Regexp.last_match.captures[0].to_f
                             pixel.background = Color.new(grey)
-                            pixel.transparent = false
                         end
                         if tag.match(/^_([01](\.\d+){0,1}),([01](\.\d+){0,1}),([01](\.\d+){0,1})$/)
-                            red   = Regexp.last_match.captures[0].to_f
-                            green = Regexp.last_match.captures[2].to_f
-                            blue  = Regexp.last_match.captures[4].to_f
-                            pixel.background = Color.new(red, green, blue)
-                            pixel.transparent = false
+                            r = Regexp.last_match.captures[0].to_f
+                            g = Regexp.last_match.captures[2].to_f
+                            b = Regexp.last_match.captures[4].to_f
+                            pixel.background = Color.new(r, g, b)
                         end
                     end
                 end
                 pixel.symbol = line[index]
-                background = canvas[[x,y]].background
-                canvas[[x,y]] = pixel.deep_clone
-                canvas[[x,y]].background = background if canvas[[x,y]].transparent
+                canvas[[x,y]] = canvas[[x,y]].merge(pixel)
+#                background = canvas[[x,y]].background
+#                canvas[[x,y]] = pixel.deep_clone
+#                canvas[[x,y]].background = background if canvas[[x,y]].transparent
                 x += 1
             end
 
