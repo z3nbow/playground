@@ -6,14 +6,13 @@ class Screen
 
     attr_accessor :elements
     attr_accessor :default_pixel
-    attr_accessor :data
-    attr_accessor :resolution_x
-    attr_accessor :resolution_y
+    attr_accessor :size_x
+    attr_accessor :size_y
 
     def initialize(pixel = Pixel.new)
         @elements = []
         @default_pixel = pixel
-        @resolution_y, @resolution_x = IO.console.winsize
+        @size_y, @size_x = IO.console.winsize
     end
 
     def add_element(element)
@@ -21,19 +20,21 @@ class Screen
     end
 
     def draw
-        @data = Hash.new(@default_pixel)
+        data = Hash.new(@default_pixel)
 
         # terminal resolution
-        @resolution_y, @resolution_x = IO.console.winsize
+        @size_y, @size_x = IO.console.winsize
 
         # load elements
         @elements.sort{ |a,b| a.layer <=> b.layer }.each do |element|
-            element.draw_on(@data)
+            element.draw_on({ :data => data, :size_x => @size_x, :size_y => @size_y })
         end
 
+        # clear screen, go to top/left, reset all styles
         out = "\e[2J\e[H\e[0m"
 
         last_pixel = Pixel.new
+
 
         (1..resolution_y).each do |y|
             (1..resolution_x).each do |x|
@@ -45,6 +46,7 @@ class Screen
                     out += "\e[38;5;#{pixel.color}m"      if pixel.color
                     out += "\e[48;5;#{pixel.background}m" if pixel.background
                 end
+                pixel.symbol = " " unless pixel.symbol
                 out += pixel.symbol
                 last_pixel = pixel
             end
@@ -57,7 +59,3 @@ class Screen
     end
 
 end
-
-
-
-
