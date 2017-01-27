@@ -18,9 +18,12 @@ class Color
         self
     end
 
-    def set_int!(r = 5, g = nil, b = nil)
-        g, b = r, r if (g.nil? && b.nil?)
-        self.set!(r/5.0, g/5.0, b/5.0)
+    def set_int!(r, g = nil, b = nil)
+        if (g.nil? && b.nil?)
+            self.set!(r/23.0)
+        else
+            self.set!(r/5.0, g/5.0, b/5.0)
+        end
     end
 
     def to_s
