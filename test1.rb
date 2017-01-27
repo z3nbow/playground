@@ -25,7 +25,7 @@ def draw_month(year, month)
     y = 3
     $screen.add_element(TextElement.new("<b><0.2,0.6,1>" + MONTH_NAMES[month].upcase + " " + year.to_s, x+1, y))
     y += 2
-    $screen.add_element(TextElement.new("<b><0.2,0.6,1>" + "-" * MONTH_NAMES[month].length + "-----", x+1, y))
+    $screen.add_element(TextElement.new("<b><0.2,0.6,1>" + ":" * MONTH_NAMES[month].length + ":::::", x+1, y))
     y += 2
     (1..last_day).each do |day|
         date = Date.new(year, month, day)
@@ -45,7 +45,7 @@ def draw_month(year, month)
             if event.id % 10 == 0
                 element.text += "<1><b><_0,0.4,0.8>#{event.title}<t>"
             else
-                element.text += "<1><b>#{event.title}"
+                element.text += "<1></b>#{event.title}<b>"
             end
             event.data[:text_element] = element
         end
