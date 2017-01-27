@@ -36,9 +36,9 @@ class Screen
         last_pixel = Pixel.new
 
 
-        (1..resolution_y).each do |y|
-            (1..resolution_x).each do |x|
-                pixel = @data[[x,y]]
+        (1..size_y).each do |y|
+            (1..size_x).each do |x|
+                pixel = data[[x,y]]
                 unless pixel.same_style?(last_pixel)
                     out += "\e[0m"
                     out += "\e[1m"                        if pixel.bold

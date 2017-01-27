@@ -188,17 +188,13 @@ class TextElement < Element
 
     attr_accessor :size_x
     attr_accessor :size_y
+    attr_reader   :text
 
-    def initialize(text, float = 0, values = {})
+    def initialize(text, pos_x = 1, pos_y = 1, layer = 1)
         @text = text
-        @pos_x = 1
-        @pos_y = 1
-        @float = float
-        @layer = 1
-        @pos_x = values[:pos_x] if values[:pos_x]
-        @pos_y = values[:pos_y] if values[:pos_y]
-        @layer = values[:layer] if values[:layer]
-
+        @pos_x = pos_x
+        @pos_y = pos_y
+        @layer = layer
         update_data
     end
 

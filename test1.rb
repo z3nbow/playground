@@ -13,7 +13,7 @@ MONTH_NAMES = ["", "Januar", "Februar", "März", "April", "Mai", "Juni",
                "Juli", "August", "September", "Oktober", "November", "Dezember"]
 WEEKDAY_NAMES = ["sonntag", "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag"]
 
-$background = Pixel.new( :s => ":", :c => Color.new(0.2), :b => Color.new(0.15), :l => true )
+$background = Pixel.new( :s => ":", :c => Color.new.set_int!(5), :b => Color.new.set_int!(4), :l => true )
 $screen     = Screen.new($background)
 $journal    = Journal.new("./journal/test.db")
 
@@ -40,17 +40,20 @@ def draw_month(year, month)
         element = TextElement.new(text, x, y)
         $screen.add_element(element)
         events[year][month][day].each_with_index do |event, index|
-            element.text += "<0.2>::" if index == 0
-            element.text += "<0.2>::<0.2,0.6,1>:<0.2>::" if index > 0
+            text = element.text
+            text += "<0.2>::" if index == 0
+            text += "<0.2>::<0.2,0.6,1>:<0.2>::" if index > 0
             if event.id % 10 == 0
-                element.text += "<1><b><_0,0.4,0.8>#{event.title}<t>"
+                text += "<1><b><_0,0.4,0.8>#{event.title}<t>"
             else
-                element.text += "<1></b>#{event.title}<b>"
+                text += "<1></b>#{event.title}<b>"
             end
+            element.set_text!(text)
             event.data[:text_element] = element
         end
         y += 1
     end
+
     $screen.draw
 end
 
