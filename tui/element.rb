@@ -216,10 +216,10 @@ class TextElement < Element
 
             tags = {}
 
-            while line.match(/<([^>]+)>/)
+            while line.match(/<([^<>]+)>/)
                 index = Regexp.last_match.offset(0).first
                 tag   = Regexp.last_match.captures.first
-                line.sub!(/<[^>]+>/, "")
+                line.sub!(/<[^<>]+>/, "")
                 tags[index] = [] unless tags[index]
                 tags[index] << tag
             end

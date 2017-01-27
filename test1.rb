@@ -41,18 +41,32 @@ def draw_month(year, month)
         $screen.add_element(element)
         events[year][month][day].each_with_index do |event, index|
             text = element.text
-            text += "<0.2>::" if index == 0
-            text += "<0.2>::<0.2,0.6,1>:<0.2>::" if index > 0
+            text += "<0.2>:" if index == 0
+            text += "<0.2>:<0.2,0.6,1>:<0.2>:" if index > 0
             if event.id % 10 == 0
-                text += "<1><b><_0,0.4,0.8>#{event.title}<t>"
+                text += "<1><b><_0,0.4,0.8><0,0.2,0.8>:<1>#{event.title}<0,0.2,0.8>:<t>"
             else
-                text += "<1></b>#{event.title}<b>"
+                text += "<0.2>:<1></b>#{event.title}<b><0.2>:"
             end
             element.set_text!(text)
             event.data[:text_element] = element
         end
         y += 1
     end
+
+    box = BoxElement.new(:x => 80, :y => 3, :w => 60, :h => 30)
+    $screen.add_element(box)
+
+     text = "<b><0.2,0.6,1>AUFGABEN\n\n::::::::\n\n"
+    text += "<b><1>[ ] </b>Kochen\n"
+    text += "<b><1>[ ] </b>Aufräumen\n"
+    text += "<b><1>    [<0,1,0>X<1>] </b>Staubsaugen\n"
+    text += "<b><1>    [ ] </b>Fenster putzen\n"
+    text += "<b><1>    [<0,1,0>X<1>] </b>Wäsche waschen\n"
+    text += "<b><1>[<1,0,0><<1>] </b>Einkaufen\n"
+
+
+    box.add_child(TextElement.new(text))
 
     $screen.draw
 end
