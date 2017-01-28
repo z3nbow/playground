@@ -16,7 +16,7 @@ class FloatElement < Element
     attr_accessor :float
     attr_accessor :element
 
-    def initialize(element, float)
+    def initialize(element, float = 1)
         @element = element
         @float = float
         @layer = element.layer
@@ -55,6 +55,9 @@ class FloatElement < Element
                 element.pos_x = (canvas[:size_x] - element.size_x) + 1
                 element.pos_y = (canvas[:size_y] - element.size_y) + 1
         end
+
+        element.pos_x += @pos_x
+        element.pos_y += @pos_y
 
         element.draw_on(canvas)
 
@@ -207,9 +210,9 @@ class TextElement < Element
 
         @data = []
 
-        pixel = Pixel.new
+        pixel = Pixel.new( :bold => false, :underline => false )
+        transparent = true
         y = 1
-
         @size_x = 0
 
         @text.split("\n").each do |line|
@@ -234,7 +237,10 @@ class TextElement < Element
                         pixel.bold        = false if tag == "/b"
                         pixel.underline   = true  if tag == "u"
                         pixel.underline   = false if tag == "/u"
-                        pixel.background  = nil   if tag == "t"
+                        transparent       = true  if tag == "t"
+                        transparent       = false if tag == "/t"
+                        pixel.color       = nil   if tag == "/c"
+                        pixel.background  = nil   if tag == "/_"
 
                         if tag.match(/^([01](\.\d+){0,1})$/)
                             grey = Regexp.last_match.captures[0].to_f
@@ -259,7 +265,7 @@ class TextElement < Element
                     end
                 end
                 pixel.symbol = line[index]
-                @data << { :x => x, :y => y, :pixel => pixel.deep_clone }
+                @data << { :x => x, :y => y, :pixel => pixel.deep_clone } unless transparent && pixel.symbol == " "
                 x += 1
             end
             @size_x = x if @size_x < x
