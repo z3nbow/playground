@@ -125,8 +125,8 @@ class BoxElement < Element
                 ((x1+2)..(x2+2)).each do |x|
                     if x > x2 || y > y2
                         pixel = canvas[:data][[x,y]].deep_clone
-                        pixel.color.drop_shadow!
-                        pixel.background.drop_shadow!
+                        pixel.color.drop_shadow! unless pixel.color.nil?
+                        pixel.background.drop_shadow! unless pixel.background.nil?
                         canvas[:data][[x,y]] = pixel
                     end
                 end

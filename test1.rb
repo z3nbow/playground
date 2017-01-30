@@ -45,14 +45,14 @@ def draw_month(year, month)
 
     # header in row 1 and 3
     events_box.add_child(TextElement.new("#{TEXT_COLORS[:header]} #{MONTH_NAMES[month].upcase} #{year}", 1, 1))
-    events_box.add_child(TextElement.new("#{TEXT_COLORS[:header]} " + "=" * (MONTH_NAMES[month].length + 5), 1, 3))
+    #events_box.add_child(TextElement.new("#{TEXT_COLORS[:header]} " + "=" * (MONTH_NAMES[month].length + 5), 1, 3))
 
     # hash for all events and text elements
     events_hash = {}
 
     # current row in events_box
-    y = 5
-    #y = 3
+    #y = 5
+    y = 3
 
     # loop over all days in current month
     (1..last_day).each do |day|
