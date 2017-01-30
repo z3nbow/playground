@@ -11,12 +11,13 @@ require "./journal/model.rb"
 
 MONTH_NAMES = ["", "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
 WEEKDAY_NAMES = ["sonntag", "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag"]
-TEXT_COLORS = { :header => "<0.2,0.6,1>",
-                :day    => "<0.2,0.6,1>",
-                :day_we => "<1,0.6,0.2>",
-                :text   => "<0.9>" }
+TEXT_COLORS = { :header => "<b><0.2,0.8,0.2>",
+                :day    => "<b><1>",
+                :day_we => "<b><0.2,0.8,0.2>",
+                :text   => "<1>" }
 
-$background = Pixel.new( :s => ":", :c => Color.new.set_int!(5), :b => Color.new.set_int!(4), :bold => true )
+$background = Pixel.new( :s => ":", :c => Color.new.set_int!(3), :b => Color.new.set_int!(2), :bold => true )
+#$background = Pixel.new( :s => " ", :c => Color.new.set_int!(0), :b => Color.new.set_int!(23), :bold => true )
 $screen     = Screen.new($background)
 $journal    = Journal.new("./journal/test.db")
 
@@ -43,15 +44,15 @@ def draw_month(year, month)
     $screen.add_element(FloatElement.new(events_box, 1))
 
     # header in row 1 and 3
-    events_box.add_child(TextElement.new("<t><b>#{TEXT_COLORS[:header]} #{MONTH_NAMES[month].upcase} #{year}", 1, 1))
-    #events_box.add_child(TextElement.new("<t><b>#{TEXT_COLORS[:header]} " + "=" * (MONTH_NAMES[month].length + 5), 1, 3))
+    events_box.add_child(TextElement.new("#{TEXT_COLORS[:header]} #{MONTH_NAMES[month].upcase} #{year}", 1, 1))
+    events_box.add_child(TextElement.new("#{TEXT_COLORS[:header]} " + "=" * (MONTH_NAMES[month].length + 5), 1, 3))
 
     # hash for all events and text elements
     events_hash = {}
 
     # current row in events_box
-    #y = 5
-    y = 3
+    y = 5
+    #y = 3
 
     # loop over all days in current month
     (1..last_day).each do |day|
@@ -82,7 +83,7 @@ def draw_month(year, month)
 
             # add seperator if not first element of current day
             if index > 0
-                events_box.add_child(TextElement.new("<0.5><b>|", x, y))
+                events_box.add_child(TextElement.new("<0.2,0.8,0.2><b>|", x, y))
                 x += 3
             end
 
@@ -109,14 +110,21 @@ def draw_month(year, month)
     # end of loop over all days in current month
     end
 
-    events_box.size_x = 100
+    events_box.size_x = 80
     events_box.size_y = y - 1
 
     # for testing with border
-    #events_box.size_x += 2
-    #events_box.size_y += 2
-    #events_box.border = true
-    #events_box.pixel  = Pixel.new( :s => " ", :c => Color.new(1), :b => Color.new(0.3))
+    events_box.size_x += 2
+    events_box.size_y += 2
+    events_box.border = true
+    events_box.shadow = true
+    events_box.pixel  = Pixel.new( :s => " ", :c => Color.new.set_int!(4), :b => Color.new.set_int!(3))
+
+    info_box = BoxElement.new(:x => 4, :y => -2, :w => 82, :h => 9, :b => true, :s => true, :p => Pixel.new( :s => " ", :c => Color.new(0.8,0.8,0), :b => Color.new(0,0.4,1)))
+    $screen.add_element(FloatElement.new(info_box, 7))
+
+    tasks_box = BoxElement.new( :x => 87, :y => 3, :w => 82, :h => events_box.size_y, :b => true, :s => true, :p => Pixel.new( :s => " ", :c => Color.new.set_int!(4), :b => Color.new.set_int!(3)) )
+    $screen.add_element(tasks_box)
 
     $screen.draw
 
@@ -170,7 +178,7 @@ $events = draw_month(year, month)
 
 $m_day = 1
 $m_idx = 1
-redraw_month()
+#redraw_month()
 
 
 
@@ -183,15 +191,15 @@ while run
         $events = draw_month(year, month)
         $m_day = 1
         $m_idx = 1
-        redraw_month()
+        #redraw_month()
     elsif key == "2" && month < 12
         month += 1
         $events = draw_month(year, month)
         $m_day = 1
         $m_idx = 1
-        redraw_month()
+        #redraw_month()
     elsif key == "w"
-        box = BoxElement.new( :w => 40, :h => 20, :p => Pixel.new( :s => " ", :b => Color.new(0.8,0.2,0.8) ), :s => true, :b => true )
+        box = BoxElement.new( :w => 120, :h => 20, :p => Pixel.new( :s => " ", :c => Color.new(1), :b => Color.new(0,0.4,1) ), :s => true, :b => true )
         $screen.add_element(FloatElement.new(box,5))
         $screen.draw
     elsif key == "l"
