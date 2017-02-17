@@ -12,22 +12,28 @@ CREATE TABLE events(
     type        INTEGER DEFAULT 0
 );
 
+--
+--  Table for tasks
+--
 CREATE TABLE tasks(
     id          INTEGER PRIMARY KEY,
-    parent      INTEGER DEFAULT NULL,
-    date        TEXT DEFAULT NULL,
+    parent_id   INTEGER DEFAULT NULL,
     title       TEXT,
     text        TEXT DEFAULT NULL,
-    state       INTEGER DEFAULT 0,
-    type        INTEGER DEFAULT 0
+    period      INTEGER DEFAULT 0,
+    date        TEXT DEFAULT NULL,
+    state       INTEGER DEFAULT 0
+    type        INTEGER DEFAULT 0,
 );
--- type 0:      without date
--- type 1:      year
--- type 2:      month
--- type 3:      day
-
-
-
-
-
-
+--  period
+--  ------
+--      0:      time-independent
+--      1:      year
+--      2:      month
+--      3:      day
+--      (more possible)
+--  type
+--  ----
+--      0:      open
+--      1:      done
+--      (more possible, e.g. migrated, cancelled, etc.)

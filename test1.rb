@@ -11,9 +11,9 @@ require "./journal/model.rb"
 
 MONTH_NAMES = ["", "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
 WEEKDAY_NAMES = ["sonntag", "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag"]
-TEXT_COLORS = { :header => "<b><0.2,0.8,0.2>",
+TEXT_COLORS = { :header => "<b><0,0.8,1>",
                 :day    => "<b><1>",
-                :day_we => "<b><0.2,0.8,0.2>",
+                :day_we => "<b><0,0.8,1>",
                 :text   => "<1>" }
 
 $background = Pixel.new( :s => ":", :c => Color.new.set_int!(3), :b => Color.new.set_int!(2), :bold => true )
