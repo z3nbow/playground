@@ -1,0 +1,29 @@
+Command Line Tool
+-----------------
+
+Arguments:
+
+    Events:
+
+                            Aktueller Monat    
+        x(x)                Monat 
+        x(x).xx(xx)         Monat / Jahr
+
+        (jeweils mit Monatstasks)
+
+        e d                 Aktueller Tag
+        e dx(x)             Tag
+        e dx(x).x(x)        Tag / Monat
+        e dx(x).x(x).xx(xx) Tag / Monat / Jahr
+
+        e add               Neues Event
+
+    Tasks:
+
+        t                   Aktueller Tag +
+                            Aktueller Monat +
+                            Unfinished old Tasks
+
+        t                   
+        
+    
